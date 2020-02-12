@@ -57,7 +57,7 @@ class Dongle2401:
         time.sleep(0.2)
         self.send([0x29, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, channel])
 
-    def set_servo_pos(index, speed=30):
+    def set_servo_pos(index, pos, speed=30):
         pass
 
     def get_servo_pos(index):
@@ -75,10 +75,10 @@ class Dongle2401:
     def unlock_servo(index):
         pass
 
-    def get_sensor(id):
+    def get_sensor(index):
         pass
 
-    def set_sensor(id, value):
+    def set_sensor(index, value):
         pass
 
     def read_sensor_name(name):
