@@ -58,33 +58,43 @@ class Dongle2401:
         self.send([0x29, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, channel])
 
     def set_servo_pos(index, pos, speed=30):
+        """设置单个舵机位置"""
         pass
 
     def get_servo_pos(index):
+        """获取单个舵机位置"""
         pass
 
     def set_servos_pos(angles, speed=30):
+        """设置全身 19 个舵机位置"""
         pass
 
     def get_servos_pos():
+        """获取全身 19 个舵机位置"""
         pass
 
     def lock_servo(index):
+        """单舵机加锁"""
         pass
 
     def unlock_servo(index):
+        """单舵机解锁"""
         pass
 
     def get_sensor(index):
+        """获取磁吸传感器数值"""
         pass
 
     def set_sensor(index, value):
+        """获取磁吸传感器数值 0~255 """
         pass
 
     def read_sensor_name(name):
+        """按照传感器名称读取数值"""
         pass
 
     def run_act(name):
+        """运行动作文件"""
         pass
 
 
