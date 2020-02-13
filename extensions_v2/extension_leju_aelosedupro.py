@@ -77,7 +77,7 @@ class Dongle2401:
         self.dongle.write(bytes(data))
 
     def read(self, size):
-        return self.dongle.read(size)
+        return list(self.dongle.read(size))
 
     def set_channel(self, channel):
         channel = channel & 0xff
@@ -104,33 +104,46 @@ class Dongle2401:
         """获取单个舵机位置"""
         self.send([0x75, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, index])
         rx_buf = self.read(10)
-        return list(rx_buf)
+        self.lock_servo(index)
+        return rx_buf[-1]
 
-    def set_servos_pos(self, angles, speed=30):
+    def set_16_servos_pos(self, angles, speed=30):
+        """设置全身 16 个舵机位置"""
+        self.send([0x92, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00] + angles + [speed])
+        rx_buf = self.read(9)
+        return rx_buf
+
+    def set_19_servos_pos(self, angles, speed=30):
         """设置全身 19 个舵机位置"""
-        pass
+        self.send([0x97, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00, 0x00] + angles + [speed])
+        rx_buf = self.read(9)
+        return rx_buf
 
     def get_servos_pos(self):
         """获取全身 19 个舵机位置"""
-        pass
+        self.send([0xA5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        rx_buf = self.read(24)
+        return rx_buf
 
     def lock_servo(self, index):
         """单舵机加锁"""
-        pass
+        self.send([0x79, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, index])
 
     def unlock_servo(self, index):
         """单舵机解锁"""
-        pass
+        self.send([0x75, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, index])
+        rx_buf = self.read(10)
+        return list(rx_buf)[-1]
 
     def get_sensor(self, index):
         """获取磁吸传感器数值"""
         pass
 
     def set_sensor(self, index, value):
-        """获取磁吸传感器数值 0~255 """
+        """设置磁吸传感器数值 0~255 """
         pass
 
-    def read_sensor_name(name):
+    def read_sensor_name(self, name):
         """按照传感器名称读取数值"""
         pass
 
