@@ -137,7 +137,19 @@ class Dongle2401:
 
     def get_sensor(self, index):
         """获取磁吸传感器数值"""
-        pass
+        head = [0x98, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        name = list('SensorInput\0')
+        l_name = [len(name)]
+        len_args = [1]  # len args
+        l_arg = [0x03]  # len arg
+        t_arg = [0x02]  # int16
+        t_data = [0x00, index]
+
+        cmd = head + l_name + name + len_args + l_arg + t_arg + t_data
+        cmd[5] = len(cmd[6:])
+        self.send(cmd)
+        rx_buf = self.read(13)
+        return rx_buf[-1]
 
     def set_sensor(self, index, value):
         """设置磁吸传感器数值 0~255 """
@@ -167,6 +179,7 @@ class LejuAelosEduExtention(Extension):
     """
     Leju Robotics Aelos Edu Extension V2
     """
+
     def __init__(self):
         super().__init__()
         self.EXTENSION_ID = "eim/leju/aelosedupro"
