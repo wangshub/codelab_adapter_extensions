@@ -73,11 +73,14 @@ class Dongle2401:
         self.dongle.reset_input_buffer()
 
     def send(self, data):
+        logger.info('tx ->', data)
         self.dongle.reset_input_buffer()
         self.dongle.write(bytes(data))
 
     def read(self, size):
-        return list(self.dongle.read(size))
+        rx_data = list(self.dongle.read(size))
+        logger.info('rx <-', rx_data)
+        return rx_data
 
     def set_channel(self, channel):
         channel = channel & 0xff
@@ -137,6 +140,9 @@ class Dongle2401:
 
     def get_sensor(self, index):
         """获取磁吸传感器数值"""
+
+        logger.info(f'get sensor {index}')
+
         head = [0x98, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         name = list('SensorInput\0')
         l_name = [len(name)]
@@ -147,7 +153,17 @@ class Dongle2401:
 
         cmd = head + l_name + name + len_args + l_arg + t_arg + t_data
         cmd[5] = len(cmd[6:])
-        self.send(cmd)
+
+        cmd_hex = []
+
+        for c in cmd:
+            if type(c) == str:
+                cmd_hex.append(ord(c))
+            else:
+                cmd_hex.append(c)
+        logger.info(cmd_hex)
+        self.send(cmd_hex)
+
         rx_buf = self.read(13)
         return rx_buf[-1]
 
