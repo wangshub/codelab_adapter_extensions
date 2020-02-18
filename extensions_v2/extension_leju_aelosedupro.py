@@ -161,7 +161,6 @@ class Dongle2401:
                 cmd_hex.append(ord(c))
             else:
                 cmd_hex.append(c)
-        logger.info(cmd_hex)
         self.send(cmd_hex)
 
         rx_buf = self.read(13)
