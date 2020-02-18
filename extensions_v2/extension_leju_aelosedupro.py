@@ -1,5 +1,7 @@
 import time
 import serial
+import serial.tools.list_ports
+
 import queue
 import threading
 import logging
@@ -59,7 +61,7 @@ class Dongle2401:
         assert False, 'Aelos usb dongle not found!'
 
     def open_port(self, port):
-        return serial.Serial(port, 9600)
+        return serial.Serial(port, 9600, timeout=3)
 
     def thread_tx(self):
         while self._running:
@@ -88,12 +90,13 @@ class Dongle2401:
         rx_buf = self.read(6)
         logger.info(rx_buf)
         self.send([0x29, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, channel])
-        # rx_buf = self.read(5)
-        return None
+        rx_buf = self.read(10)
+        return 'OK'
 
     def connect_to_robot(self):
         self.send([0x83])
-        return None
+        rx_buf = self.read(9)
+        return 'OK'
 
     def set_servo_pos(self, index, pos, speed=30):
         """设置单个舵机位置 76 00 00 00 00 00 00 00 01 60"""
