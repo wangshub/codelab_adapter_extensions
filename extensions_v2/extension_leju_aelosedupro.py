@@ -173,13 +173,16 @@ class Dongle2401:
         """设置磁吸传感器数值 0~255 """
         pass
 
-    def read_sensor_name(self, name):
-        """按照传感器名称读取数值"""
-        pass
-
-    def run_act(self, name):
-        """运行动作文件"""
-        pass
+    def set_servos_rigid(self, rigid):
+        """Set 16 servo rigid parameters"""
+        head = [0x99, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00]
+        cmd = head + rigid
+        self.send(cmd)
+        rx_buf = self.read(9)
+        if rx_buf[-1] == 0x01:
+            return 'OK'
+        else:
+            return 'FAILED'
 
 
 def parse_content(content):
