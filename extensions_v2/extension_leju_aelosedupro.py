@@ -143,9 +143,6 @@ class Dongle2401:
 
     def get_sensor(self, index):
         """获取磁吸传感器数值"""
-
-        logger.info(f'get sensor {index}')
-
         head = [0x98, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         name = list('SensorInput\0')
         l_name = [len(name)]
@@ -171,7 +168,10 @@ class Dongle2401:
 
     def set_sensor(self, index, value):
         """设置磁吸传感器数值 0~255 """
-        pass
+        cmd_hex = [0x98, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+                   0x06, 0x49, 0x4f, 0x6f, 0x75, 0x74, 0x00, 0x02,
+                   0x03, 0x02, 0x00, index, 0x03, 0x02, 0x00, value]
+        self.send(cmd_hex)
 
     def set_servos_rigid(self, rigid):
         """Set 16 servo rigid parameters"""
