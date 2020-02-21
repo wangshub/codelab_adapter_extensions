@@ -164,7 +164,10 @@ class Dongle2401:
         self.send(cmd_hex)
 
         rx_buf = self.read(13)
-        return rx_buf[-1]
+        try:
+            return rx_buf[-1]
+        except Exception as err:
+            return 0
 
     def set_sensor(self, index, value):
         """设置磁吸传感器数值 0~255 """
